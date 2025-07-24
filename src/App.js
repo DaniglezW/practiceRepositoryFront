@@ -5,6 +5,9 @@ import Chat from './components/Chat';
 import { getCookie, refreshToken, verifyToken } from './services/authService';
 import { Constants } from './utils/Constants';
 import Loading from './components/Loding';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+const GOOGLE_CLIENT_ID = '1067738625405-8nndn3lkooalhvb0q4t02jvi8tpd54p7.apps.googleusercontent.com';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -45,11 +48,21 @@ export default function App() {
   if (loading) return <Loading />;
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Home onAuthChange={updateAuthentication} />} />
-        <Route path="/home" element={isAuthenticated ? <Chat /> : <Navigate to="/" />} />
-      </Routes>
-    </Router>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <Router>
+        <Routes>
+          <Route path="/" element={
+            isAuthenticated
+              ? (<Navigate to="/home" />)
+              : (<Home onAuthChange={updateAuthentication} />)
+          }
+          />
+          <Route
+            path="/home"
+            element={isAuthenticated ? <Chat /> : <Navigate to="/" />}
+          />
+        </Routes>
+      </Router>
+    </GoogleOAuthProvider>
   );
 }

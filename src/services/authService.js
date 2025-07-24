@@ -61,3 +61,15 @@ export const getCookie = (name) => {
   if (parts.length === 2) return parts.pop().split(';').shift();
   return null;
 };
+
+export const socialLogin = async (idToken, provider = 'google') => {
+  const response = await fetch(`${API_URL}/social-login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({ idToken, provider }),
+  });
+  return handleResponse(response);
+};
